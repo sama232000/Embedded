@@ -1,0 +1,32 @@
+#include <math.h>
+#define pi 3.14159265358979323846
+
+double distance,prev_lat,prev_lon;
+
+double Dist(double lat1, double lon1, double lat2, double lon2 )
+{
+double X;
+X = sin(lat1*pi /180) * sin(lat2*pi /180) + cos(lat1*pi /180) * cos(lat2*pi /180) * cos((lon1-lon2)*pi /180);
+// Multiplying the values by pi/180 to convert them from decimal degrees to radian
+X = acos(X);
+X = X *1000*6371;
+//6371 is the radius of earth in km 
+// The distance is expressed in meters
+    
+    return (X);
+}
+
+
+
+void UpdateDistance (double lat,double lon){
+ if( prev_lat != 0 && prev_lon != 0)
+ distance += Dist(prev_lat, prev_lon, lat, lon);
+ prev_lat = lat;
+ prev_lon = lon;
+}
+
+
+
+
+
+
