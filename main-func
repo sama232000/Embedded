@@ -1,0 +1,22 @@
+int main(void)
+{
+while(1){
+portf_init();
+TURN_ON_LED();
+LCD_init();
+for(;;)
+{
+LCD_command(1); /* clear display */
+LCD_command(0x80); /* lcd cursor location */
+delayMs(500);
+LCD_data('T');
+LCD_data('E');
+LCD_data('A');
+LCD_data('M');
+LCD_data(' ');
+LCD_data('7');
+LCD_data('7');
+delayMs(500);
+}
+}
+}
