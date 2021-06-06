@@ -3,13 +3,12 @@
 
 double distance,prev_lat,prev_lon;
 
-double haversine(double lat1, double lon1, double lat2, double lon2 )
-{
+double haversine(double lat1, double lon1, double lat2, double lon2 ){
 double X;
 X = pow(sin((lat1-lat2)*pi /360),2) + pow(sin((lon1-lon2)*pi /360),2)* cos(lat1*pi /180) * cos(lat2*pi /180);
 X =2* asin(sqrt(X));
 X = X *1000*6371;
-/*6371 is the radius of earth in km 
+ /*6371 is the radius of earth in km 
  The distance is expressed in meters*/
     
     return (X);
