@@ -1,0 +1,5 @@
+// wait for buffer to be not full 
+void UART_OutChar(uint8_t data) { 
+while ((UART0_FR_R & 0x0020) != 0);
+UART0_DR_R = data;
+}
