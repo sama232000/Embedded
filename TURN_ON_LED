@@ -1,0 +1,11 @@
+void TURN_ON_LED(void)
+
+{
+distance=GetDistance(55,45,25,20);
+
+if (distance>100)
+{
+GPIO_PORTF_DATA_R = 0x02;    //turns on red led
+}
+
+}
