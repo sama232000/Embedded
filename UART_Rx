@@ -3,9 +3,4 @@
 			while ((UART0_FR_R & 0x0010) !=0);
 			return((uint8_t) (UART0_DR_R & 0xFF));   //wait until RXFE is 0
 			}
-void Delay(int n)
-{
-	unsigned long i = 0;
-	
-	for(i=0; i< n ; i++);
-}
+
