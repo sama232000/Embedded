@@ -2,8 +2,7 @@
 #include "TM4C123GH6PM.H"
 #include <stdint.h>
 void SystemInit(){};
-void UART_init(void);
-	int main(void){
+void UART_init(void){
 		SYSCTL_RCGCUART_R |=0x0001  ;      //enable UART0
 		SYSCTL_RCGCGPIO_R |=0x0001 ;      //Activate port A
 		
