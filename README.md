@@ -2,7 +2,9 @@
 int a,b,c,d;
 a = floor(distance);
 b = (distance-a) * pow(10,3);
+
 c = reversDigits (a);
+
 d = reversDigits (b);
 
     while(c > 0) //do till num greater than  0
