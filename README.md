@@ -1,4 +1,5 @@
-# Embeddint a,b,c,d;
+# Embedd
+int a,b,c,d;
 a = floor(distance);
 b = (distance-a) * pow(10,3);
 c = reversDigits (a);
