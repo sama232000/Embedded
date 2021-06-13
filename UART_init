@@ -1,18 +1,43 @@
-#include "Tm4C123.h"             // header file
 #include "TM4C123GH6PM.H"
 #include <stdint.h>
+#include "string.h"
+#include "stdio.h"
+#define CR   0x0D
 void SystemInit(){};
-void UART_init(void){
-		SYSCTL_RCGCUART_R |=0x0001  ;      //enable UART0
-		SYSCTL_RCGCGPIO_R |=0x0001 ;      //Activate port A
-		
-		UART0_CTL_R &= ~0x0001;           // disable UART
-		UART0_IBRD_R = 104;               //IBRD = int (16000000/16*9600) = int(104.16666)
-		UART0_FBRD_R = 11 ;               //IBRD = int (0.166666*64 + 0.5)
-		UART0_LCRH_R = 0x0070 ;           // 8-bit word length, enable FIFO 001110000
-		UART0_CTL_R = 0X0301;             // enable RXE, TXE and UART 001100000001
-		GPIO_PORTA_AFSEL_R |= 0X03;       //ENABLE ALTERNATIVE FUNCTION PA0, PA1
-		GPIO_PORTA_PCTL_R |= (GPIO_PORTA_PCTL_R & 0xFFFFFF00) + 0x00000011; 
-		GPIO_PORTA_DEN_R |= 0X03;         //ENABLE digital I/O on PA0, PA1
-		GPIO_PORTA_AMSEL_R &= ~0x03 ;     // disable analog function on PA0, PA1
+
+void UART_init(){
+		SYSCTL_RCGCUART_R |= SYSCTL_RCGCUART_R1  ;      // Enable UART1 clk
+		SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R2 ;       // activate port C clk
+		while ( (SYSCTL_PRUART_R & (SYSCTL_RCGCUART_R1) ) != (1)) {};    // delay, waiting to be ready (bit = 1)  ?
+		while ( (SYSCTL_PRGPIO_R & (SYSCTL_RCGCGPIO_R2) ) != (1)) {};    // delay, waiting to be ready (bit = 1)  ?
+		UART1_CTL_R &= ~ UART1_CTL_R ;                // disable UART 
+		UART1_CTL_R = 0X00000301;                     // enable RXE, TXE and UART 001100000001
+		UART1_IBRD_R = 104 ;                          // IBRD = int (16000000/16*9600) = int(104.16666)
+		UART1_FBRD_R = 11 ;                           // IBRD = int (0.166666*64 + 0.5)
+		UART1_LCRH_R = (0x0070);  // 8-bit word length, enable FIFO 001110000 (UART1_LCRH_WLEN_8 | UART1_LCRH_FEN)
+		GPIO_PORTC_AFSEL_R = 0x0030 ;                // Enable Alternative Function PC4 - 5
+		GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R & 0xFF00FFFF) | 0x00220000 ; 
+		GPIO_PORTC_DIR_R = 0x20;                     // PC4 input/ PC5 output
+		GPIO_PORTC_DEN_R = 0x0030;                   // Enable digital I/O on PC4 - 5
+		GPIO_PORTC_AMSEL_R &= ~0x0030 ;               // disable analog function on PC4 - 5
+		}	
+// wait for new input
+char UART1_InChar(void){
+	while ((UART1_FR_R & 0x00000010) != 0);
+return(char) (UART1_DR_R & 0xFF ) ;   //wait until RXFE is 0 ; 
+}
+
+//  after UART1_OutChar declaration
+
+void getCommand(char *command , int len){
+  char c;
+  int i;
+  for(i =0 ; i < len ; i++){
+    c = UART1_InChar();
+    if( c != CR ){
+		command[i] = c ;
+		UART1_OutChar( command [i]);
 		}
+	else if (c == CR || i == len) break ;
+	}
+}
