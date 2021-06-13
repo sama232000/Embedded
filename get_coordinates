@@ -1,0 +1,16 @@
+void get_coordinates(void)
+{
+
+ Latitude = atof(lat);
+ Longitude = atof(lg );
+ double g =0;
+ g=floor(Latitude/100);
+ double h =0;
+ h=(Latitude - g*100)/60;
+ Latitude = g+ h;
+
+ g = floor(Longitude/100);
+ h = (Longitude - g*100)/60;
+ Longitude = g+ h;
+
+}
